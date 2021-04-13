@@ -150,7 +150,7 @@ Generally, it **exploits the context along layer, row, and column dimensions.** 
 
 The time complexity of the naive implementation (i.e., two for-loops) for each layer is O(N ×N) for a sentence with length N. However, anti-diagonal entries can be calculated at the same time as they do not depend on each other. Therefore, they can optimize it through parallelization and reduce the effective time complexity to O(N). 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.003.png)
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.003.png =100x100)
 
 The above illustration describes a unidirectional RNN, corresponding to Figure 4(a). Intuitively, **they would prefer the network to have access to the surrounding context in all directions.** However, this could not be done by one single RNN. For the case of 1D sequence modeling, this problem is resolved by introducing bidirectional RNNs. Graves et al. (2007) discussed quad directional RNNs to access the context from four directions for modeling 2D data. Therefore, similar to 2D-RNN, they also need to consider RNNs in four directions. They visualize them in Figure 4. 
 
@@ -159,7 +159,7 @@ Empirically, they found **the setting only considering cases (a) and (c) in Figu
 **The final table representation is then the concatenation of the hidden states of the two RNNs**: 
 
 
-<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png .jpg" alt="drawing" style="width:100px;width:100px"/>
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png" alt="drawing" style="width:100px;width:100px"/>
 
 
 - **Sequence encoder:** The sequence encoder is used to learn the sequence representation – a sequence of vectors, where the i-th vector corresponds to the i-th word of the input sentence![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.005.png)
