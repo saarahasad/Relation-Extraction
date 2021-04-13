@@ -159,7 +159,7 @@ Empirically, they found **the setting only considering cases (a) and (c) in Figu
 **The final table representation is then the concatenation of the hidden states of the two RNNs**: 
 
 
-<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png" alt="drawing" style="width:50%;!important"/>
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png" alt="drawing"  width="100" height="100" />/>
 
 
 - **Sequence encoder:** The sequence encoder is used to learn the sequence representation – a sequence of vectors, where the i-th vector corresponds to the i-th word of the input sentence![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.005.png)
