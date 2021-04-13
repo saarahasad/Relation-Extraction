@@ -105,12 +105,12 @@ Model
 
 Link to the model part of the code: <https://github.com/LorrinWWW/two-are-better-than-one/blob/master/models/joint_models.py> 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.001.png)
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.001.png=250x250)
 
 
 - Figure 3 presents the details of each layer of the two encoders, and how they interact with each other. **In each layer, the table encoder uses the sequence representation to construct the table representation; and then the sequence encoder uses the table representation to contextualize the sequence representation.** With multiple layers, they incrementally improve the quality of both representations.
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.002.png)
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.002.png=250x250)
 
 - **Text Embedder:**  For a sentence containing N words x = [xi]1≤i≤N , it is defined
 
@@ -158,7 +158,7 @@ Empirically, they found **the setting only considering cases (a) and (c) in Figu
 
 **The final table representation is then the concatenation of the hidden states of the two RNNs**: 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png)
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png =250x250)
 
 - **Sequence encoder:** The sequence encoder is used to learn the sequence representation – a sequence of vectors, where the i-th vector corresponds to the i-th word of the input sentence![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.005.png)
 - **Training and Evaluation**: The paper use SL and T L to predict the probability distribution of the entity and relation tags: 
@@ -171,7 +171,7 @@ where **YNER and YRE are random variables of the predicted tags,** and **Pθ is 
 
 For training, both NER and RE adopt the prevalent cross-entropy loss. Given the input text x and its gold tag sequence yNER and tag table yRE, they then calculate the following two losses: 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.006.png)
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.006.png =250x250)
 
 
 
