@@ -105,12 +105,13 @@ Model
 
 Link to the model part of the code: <https://github.com/LorrinWWW/two-are-better-than-one/blob/master/models/joint_models.py> 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.001.png=250x250)
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.001.png" alt="drawing"  width="400" />
 
 
 - Figure 3 presents the details of each layer of the two encoders, and how they interact with each other. **In each layer, the table encoder uses the sequence representation to construct the table representation; and then the sequence encoder uses the table representation to contextualize the sequence representation.** With multiple layers, they incrementally improve the quality of both representations.
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.002.png=250x250)
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.002.png" alt="drawing"  width="400" />
+
 
 - **Text Embedder:**  For a sentence containing N words x = [xi]1≤i≤N , it is defined
 
@@ -150,7 +151,9 @@ Generally, it **exploits the context along layer, row, and column dimensions.** 
 
 The time complexity of the naive implementation (i.e., two for-loops) for each layer is O(N ×N) for a sentence with length N. However, anti-diagonal entries can be calculated at the same time as they do not depend on each other. Therefore, they can optimize it through parallelization and reduce the effective time complexity to O(N). 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.003.png =100x100)
+
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.003.png" alt="drawing"  width="400" />
+
 
 The above illustration describes a unidirectional RNN, corresponding to Figure 4(a). Intuitively, **they would prefer the network to have access to the surrounding context in all directions.** However, this could not be done by one single RNN. For the case of 1D sequence modeling, this problem is resolved by introducing bidirectional RNNs. Graves et al. (2007) discussed quad directional RNNs to access the context from four directions for modeling 2D data. Therefore, similar to 2D-RNN, they also need to consider RNNs in four directions. They visualize them in Figure 4. 
 
@@ -173,8 +176,7 @@ where **YNER and YRE are random variables of the predicted tags,** and **Pθ is 
 
 For training, both NER and RE adopt the prevalent cross-entropy loss. Given the input text x and its gold tag sequence yNER and tag table yRE, they then calculate the following two losses: 
 
-![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.006.png =250x250)
-
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.006.png"  width="400" />
 
 
 During evaluation, the prediction of relations re- lies on the prediction of entities, so they first predict the entities, and then look up the relation proba- bility table Pθ (YRE ) to see if there exists a valid relation between predicted entities.					
