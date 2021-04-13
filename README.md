@@ -84,7 +84,7 @@ Unsupervised relation extraction involves extracting relations from text without
 
 # Approach Selected
 
-Title of the paper whose approach is followed in this proposal:  Two are Better than One: Joint Entity and Relation Extraction with Table-Sequence Encoders
+### Title of the paper whose approach is followed in this proposal:  Two are Better than One: Joint Entity and Relation Extraction with Table-Sequence Encoders
 
 Link to paper: <https://arxiv.org/abs/2010.03851> 
 
