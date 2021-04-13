@@ -79,3 +79,105 @@ A few approaches to limit the noise in the training dataset is to use sentence-l
 #### 4. Unsupervised relation extraction
 
 Unsupervised relation extraction involves extracting relations from text without having to manually label any training data, write rules to capture different types of relations or use seed triples from existing knowledge bases. This can be applied to domains where annotated data and knowledge bases are not available. Unsupervised relation extraction methods can be used to extract new relation types; it is not restricted to specific relation types like in the case of supervised or distantly supervised methods. These methods can be categorised into two approaches: generative and discriminative. Open Information Extraction (Open IE) generally refers to this paradigm.
+
+
+
+# Approach Selected
+
+Title of the paper whose approach is followed in this proposal:  Two are Better than One: Joint Entity and Relation Extraction with Table-Sequence Encoders
+
+Link to paper: <https://arxiv.org/abs/2010.03851> 
+
+Brief overview:
+
+- This approach learns two separate encoders – a table encoder and a sequence encoder. They interact with each other, and can capture task specific information for the NER and RE tasks;
+- Uses multidimensional recurrent neural networks to better exploit the structural information of the table representation;
+- Effectively leverages the word-word interaction information carried in the attention weights from BERT, which further improves the performance.
+
+Problem Formulation: 
+
+- NER task is treated as a sequence labeling problem, where the gold entity tags yNER are in the standard BIO (Begin, Inside, Outside) scheme 
+- RE task is treated as a table filling problem.
+
+Model
+
+- The model consists of two types of **interconnected** encoders, **a table encoder for table representation** and **a sequence encoder for sequence representation.**Collectively, called **table-sequence encoders**. This is represented in Figure 2.
+
+Link to the model part of the code: <https://github.com/LorrinWWW/two-are-better-than-one/blob/master/models/joint_models.py> 
+
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.001.png)
+
+
+- Figure 3 presents the details of each layer of the two encoders, and how they interact with each other. **In each layer, the table encoder uses the sequence representation to construct the table representation; and then the sequence encoder uses the table representation to contextualize the sequence representation.** With multiple layers, they incrementally improve the quality of both representations.
+
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.002.png)
+
+- **Text Embedder:**  For a sentence containing N words x = [xi]1≤i≤N , it is defined
+
+**(1) word embeddings xw ∈ RN×d1**, **as well as**  
+
+**(2) character embeddings xc ∈ RN×d2 computed by an LSTM** (Lample et al., 2016).
+
+**(3) contextualized word embeddings x` ∈ RN×d3, which can be produced from language models such as BERT.** 
+
+The above is **concatenated for** **embeddings for each word** 
+
+and 
+
+**use a linear projection to form the initial sequence representation S0 ∈ RN×H:** 
+
+S0 = Linear([xc; xw; x`]) 
+
+where each word is represented as an H dimensional vector. 
+
+- **Table Encoder:** The table encoder, shown in the left part of Figure 3, is a neural network used to learn a table representation, an N × N table of vectors, where the vector at row i and column j corresponds to the i-th and j-th word of the input sentence. 
+
+**They first construct a non-contextualized table by concatenating every two vectors of the sequence representation followed by a fully-connected layer to halve the hidden size.**
+
+Formally, for the l-th layer, they have Xl ∈ RN×N×H, where: 
+
+Xl,i,j = ReLU(Linear([Sl−1,i; Sl−1,j ])) 
+
+
+
+Next, the paper uses the **Multi-Dimensional Recurrent Neural Networks** (MD-RNN, Graves et al. 2007) **with Gated Recurrent Unit** (GRU, Cho et al. 2014) **to contextualize Xl.** 
+
+Then, they **iteratively compute the hidden states of each cell to form the contextualized table representation T l,** where: 
+
+Tl,i,j = GRU(Xl,i,j , Tl−1,i,j , Tl,i−1,j , Tl,i,j−1)
+
+Generally, it **exploits the context along layer, row, and column dimensions.** That is, it does not consider only the cells at neighbouring rows and columns, but also those of the previous layer. 
+
+The time complexity of the naive implementation (i.e., two for-loops) for each layer is O(N ×N) for a sentence with length N. However, anti-diagonal entries can be calculated at the same time as they do not depend on each other. Therefore, they can optimize it through parallelization and reduce the effective time complexity to O(N). 
+
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.003.png)
+
+The above illustration describes a unidirectional RNN, corresponding to Figure 4(a). Intuitively, **they would prefer the network to have access to the surrounding context in all directions.** However, this could not be done by one single RNN. For the case of 1D sequence modeling, this problem is resolved by introducing bidirectional RNNs. Graves et al. (2007) discussed quad directional RNNs to access the context from four directions for modeling 2D data. Therefore, similar to 2D-RNN, they also need to consider RNNs in four directions. They visualize them in Figure 4. 
+
+Empirically, they found **the setting only considering cases (a) and (c) in Figure 4 achieves no worse performance than considering four cases altogether. Therefore, to reduce the amount of computation, they use such a setting as default.** 
+
+**The final table representation is then the concatenation of the hidden states of the two RNNs**: 
+
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png)
+
+- **Sequence encoder:** The sequence encoder is used to learn the sequence representation – a sequence of vectors, where the i-th vector corresponds to the i-th word of the input sentence![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.005.png)
+- **Training and Evaluation**: The paper use SL and T L to predict the probability distribution of the entity and relation tags: 
+
+Pθ(YNER) = softmax(Linear(SL)) 
+
+Pθ(YRE) = softmax(Linear(T L))
+
+where **YNER and YRE are random variables of the predicted tags,** and **Pθ is the estimated probability function with θ being our model parameters.** 
+
+For training, both NER and RE adopt the prevalent cross-entropy loss. Given the input text x and its gold tag sequence yNER and tag table yRE, they then calculate the following two losses: 
+
+![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.006.png)
+
+
+
+During evaluation, the prediction of relations re- lies on the prediction of entities, so they first predict the entities, and then look up the relation proba- bility table Pθ (YRE ) to see if there exists a valid relation between predicted entities.					
+
+Specifically, they predict the entity tag of each word by choosing the class with the highest probability:					
+
+Argmax Pθ(YiNER =e) (16) e 		
+
