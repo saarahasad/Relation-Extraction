@@ -165,7 +165,11 @@ Empirically, they found **the setting only considering cases (a) and (c) in Figu
 <img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.004.png" alt="drawing"  width="400" />
 
 
-- **Sequence encoder:** The sequence encoder is used to learn the sequence representation – a sequence of vectors, where the i-th vector corresponds to the i-th word of the input sentence![](Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.005.png)
+- **Sequence encoder:** The sequence encoder is used to learn the sequence representation – a sequence of vectors, where the i-th vector corresponds to the i-th word of the input sentence.
+
+<img src="Aspose.Words.40521300-4df1-48cf-b288-00d5ab9ad7e0.005.png" alt="drawing"  width="400" />
+
+
 - **Training and Evaluation**: The paper use SL and T L to predict the probability distribution of the entity and relation tags: 
 
 Pθ(YNER) = softmax(Linear(SL)) 
