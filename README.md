@@ -189,3 +189,7 @@ Specifically, they predict the entity tag of each word by choosing the class wit
 
 Argmax Pθ(YiNER =e) (16) e 		
 
+## References
+
+1. Repository to track the progress in Natural Language Processing (NLP), including the datasets and the current state-of-the-art for the most common NLP tasks. https://github.com/sebastianruder/NLP-progress/blob/master/english/relationship_extraction.md
+
